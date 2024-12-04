@@ -1,0 +1,113 @@
+<div class="register-container">
+  <p-toast />
+  <p-card header="Registro de Usuario" styleClass="card-container">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid field">
+        <label for="name">Nombre</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          placeholder="Ingrese su nombre"
+          class="p-invalid"
+          [ngClass]="{
+            'p-invalid': registerForm.controls.name.invalid
+          }"
+        />
+        <small
+          *ngIf="
+            registerForm.controls.name.invalid &&
+            registerForm.controls.name.touched
+          "
+          class="p-error"
+        >
+          <ng-container
+            *ngIf="registerForm.controls.name.invalid && registerForm.controls.name.errors?.['required']"
+            >El nombre es obligatorio.</ng-container
+          >
+          <ng-container
+            *ngIf="registerForm.controls.name.invalid && registerForm.controls.name.errors?.['minlength']"
+          >
+            Debe tener al menos 3 caracteres.
+          </ng-container>
+        </small>
+      </div>
+
+      <div class="p-fluid field">
+        <label for="identification">Documento</label>
+        <input
+          id="identification"
+          type="text"
+          pInputText
+          formControlName="identification"
+          placeholder="Ingrese su documento"
+          class="p-invalid"
+          [ngClass]="{
+            'p-invalid': registerForm.controls.identification.invalid
+          }"
+        />
+        <small
+          *ngIf="
+            registerForm.controls.identification.invalid &&
+            registerForm.controls.identification.touched
+          "
+          class="p-error"
+        >
+          <ng-container
+            *ngIf="registerForm.controls.identification.invalid && registerForm.controls.identification.errors?.['required']"
+            >El documento es obligatorio.</ng-container
+          >
+          <ng-container
+            *ngIf="registerForm.controls.identification.invalid && registerForm.controls.identification.errors?.['pattern']"
+          >
+            Debe ingresar solo números.
+          </ng-container>
+        </small>
+      </div>
+
+      <div class="p-fluid field">
+        <label for="email">Correo Electrónico</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          formControlName="email"
+          placeholder="Ingrese su correo"
+          [ngClass]="{
+            'p-invalid': registerForm.controls.email.invalid
+          }"
+        />
+        <small
+          *ngIf="
+            registerForm.controls.email.invalid &&
+            registerForm.controls.email.touched
+          "
+          class="p-error"
+        >
+          <ng-container
+            *ngIf="registerForm.controls.email.invalid && registerForm.controls.email.errors?.['required']"
+            >El correo es obligatorio.</ng-container
+          >
+          <ng-container
+            *ngIf="registerForm.controls.email.invalid && registerForm.controls.email.errors?.['email']"
+          >
+            Debe ingresar un correo válido.
+          </ng-container>
+        </small>
+      </div>
+
+      <div class="button-group">
+        <button
+          pButton
+          type="submit"
+          label="Registrar"
+          [disabled]="registerForm.invalid"
+        ></button>
+      </div>
+    </form>
+    <div class="linkContainer">
+      <a href="/login" class="text-center">Ingresar</a>
+    </div>
+  </p-card>
+</div>

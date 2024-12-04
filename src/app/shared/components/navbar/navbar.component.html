@@ -1,0 +1,12 @@
+<p-menubar [model]="items">
+  <ng-template pTemplate="end">
+    <div class="flex align-items-center gap-2">
+      <button
+        class="w-8rem sm:w-auto"
+        (click)="logUser()"
+        pButton
+        label="Salir"
+      ></button>
+    </div>
+  </ng-template>
+</p-menubar>

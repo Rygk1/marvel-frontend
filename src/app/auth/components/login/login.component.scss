@@ -1,0 +1,38 @@
+.login-container {
+  max-width: 400px;
+  margin: 2rem auto;
+
+  .card-container {
+    padding: 2rem;
+  }
+
+  .field {
+    margin-bottom: 1.5rem;
+  }
+
+  .p-error {
+    font-size: 0.875rem;
+    color: #f44336;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+}
+
+.linkContainer {
+  padding-top: 1.5rem;
+  width: 360px;
+  display: flex;
+  justify-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.disabledButton {
+  background-color: red;
+}
