@@ -1,4 +1,3 @@
-// Import PrimeNG modules
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';

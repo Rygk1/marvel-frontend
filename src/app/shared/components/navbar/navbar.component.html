@@ -5,7 +5,7 @@
         class="w-8rem sm:w-auto"
         (click)="logUser()"
         pButton
-        label="Salir"
+        [label]="isLogedIn ? 'Salir' : 'Log In'"
       ></button>
     </div>
   </ng-template>

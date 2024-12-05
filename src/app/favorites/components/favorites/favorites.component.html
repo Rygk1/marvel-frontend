@@ -1,1 +1,38 @@
-<p>favorites works!</p>
+<app-navbar class="custom-navbar"></app-navbar>
+<div class="favoriteContainer">
+  <p-toast />
+  <p-confirmPopup />
+  <p-table
+    [value]="myFavorites"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Imagen</th>
+        <th>Título</th>
+        <th>Descripción</th>
+        <th>Opciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-favorite>
+      <tr>
+        <td class="columnImg">
+          <img class="thumbnailImg" [src]="favorite.thumbnail" />
+        </td>
+        <td>{{ favorite.title }}</td>
+        <td>{{ favorite.description || "Sin descripción" }}</td>
+        <td>
+          <p-button
+            (click)="validate($event, favorite.comicId)"
+            label="Eliminar"
+            severity="danger"
+            [outlined]="true"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

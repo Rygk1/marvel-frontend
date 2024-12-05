@@ -11,11 +11,12 @@ import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 
 import { ImportsModule } from '../../../shared/components/imports';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ImportsModule],
+  imports: [ImportsModule, NavbarComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   providers: [MessageService],

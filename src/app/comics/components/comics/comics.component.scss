@@ -5,11 +5,14 @@
   //   gap: 1.5rem;
   max-width: 100vw;
 }
-.thumbnailImg {
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  width: 80%;
-  border-radius: 8px;
+.columnImg {
+  width: 150px;
+  .thumbnailImg {
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    width: 80%;
+    border-radius: 8px;
+  }
 }
 .details {
   width: 150px;
@@ -20,10 +23,6 @@
 .containerImg {
   display: flex;
   justify-content: center;
-}
-
-.columnImg {
-  width: 150px;
 }
 
 .buttonsContianer {

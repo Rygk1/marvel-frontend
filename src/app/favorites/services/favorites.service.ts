@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Favorite } from '../../comics/services/models/favorites.model';
 import { TokenService } from '../../shared/services/token.service';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +14,21 @@ export class FavoritesService {
 
   addFavorite(favorite: Partial<Favorite>) {
     const userId = this.tokenService.getUserIdToken();
-    console.log('🚀 ~ FavoritesService ~ addFavorite ~ userId:', userId);
-    console.log('🚀 ~ FavoritesService ~ addFavorite ~ favorite:', favorite);
-
     return this.https.post(`${this.url}favorites/${userId}`, favorite);
   }
 
-  getFavorites() {
-    // return this.https.get(`${this.url}/favorites`, favorite);
+  removeFavorite(id: number): Observable<{ message: string }> {
+    const userId = this.tokenService.getUserIdToken();
+    return this.https.delete<{ message: string }>(
+      `${this.url}favorites/${userId}/${id}`
+    );
+  }
+
+  getFavorites(): Observable<Favorite[]> {
+    const userId = this.tokenService.getUserIdToken();
+    const favorites = this.https.get<Favorite[]>(
+      `${this.url}favorites/${userId}`
+    );
+    return favorites;
   }
 }

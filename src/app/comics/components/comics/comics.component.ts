@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ComicsService } from '../../services/comics.service';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +15,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ImportsModule } from '../../../shared/components/imports';
 import { Favorite } from '../../services/models/favorites.model';
 import { MessageService } from 'primeng/api';
+import { combineLatest, map, Subscription } from 'rxjs';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { TokenService } from '../../../shared/services/token.service';
 
 @Component({
   selector: 'app-comics',
@@ -32,36 +35,61 @@ import { MessageService } from 'primeng/api';
     DynamicDialogModule,
     ConfirmDialogModule,
     ImportsModule,
+    NavbarComponent,
   ],
   templateUrl: './comics.component.html',
   styleUrl: './comics.component.scss',
   providers: [MessageService],
 })
-export class ComicsComponent implements OnInit {
+export class ComicsComponent implements OnInit, OnDestroy {
   myComics: any[] = [];
   totalRecords: number = 0;
   loading: boolean = false;
 
   marvelService = inject(ComicsService);
   favoriteService = inject(FavoritesService);
+  tokenService = inject(TokenService);
+
   currentComic: any;
   visible: boolean = false;
+  subs: Subscription[] = [];
+  isLogedIn: string | null = null;
 
   constructor(private messageService: MessageService) {}
+
+  ngOnDestroy(): void {
+    this.subs.forEach((sub) => sub.unsubscribe());
+  }
 
   ngOnInit(): void {
     this.getComics();
   }
 
-  getComics() {
-    // this.favoriteService.
+  validateLogin() {
+    this.isLogedIn = this.tokenService.getToken();
+  }
 
-    this.marvelService.getComics(0, 10).subscribe((comics: any) => {
-      if (comics.length === 0) {
-        return;
-      }
-      this.myComics = comics.results;
-    });
+  getComics(event?: any) {
+    const offset = event?.first;
+    const limit = event?.rows;
+
+    const sub = combineLatest([
+      this.marvelService.getComics(offset || 0, limit || 10),
+      this.favoriteService.getFavorites(),
+    ])
+      .pipe(
+        map(([comics, favorites]) => {
+          const result = this.addFavoriteFlag(comics, favorites);
+          comics.results = result;
+          return comics;
+        })
+      )
+      .subscribe((comics) => {
+        this.myComics = comics.results;
+        this.totalRecords = comics.total;
+        this.loading = false;
+      });
+    this.subs.push(sub);
   }
 
   loadComics(event: any) {
@@ -69,24 +97,35 @@ export class ComicsComponent implements OnInit {
     const offset = event.first;
     const limit = event.rows;
 
-    this.marvelService.getComics(offset, limit).subscribe({
-      next: (data: any) => {
-        if (data && data.length === 0) {
-          return;
-        }
-        this.myComics = data.results;
-        this.totalRecords = data.total;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar los cómics:', err);
-        this.loading = false;
-      },
-    });
+    const sub1 = combineLatest([
+      this.marvelService.getComics(offset, limit),
+      this.favoriteService.getFavorites(),
+    ])
+      .pipe(
+        map(([comics, favorites]) => {
+          const result = this.addFavoriteFlag(comics, favorites);
+          comics.results = result;
+          return comics;
+        })
+      )
+      .subscribe({
+        next: (data: any) => {
+          if (data && data.length === 0) {
+            return;
+          }
+          this.myComics = data.results;
+          this.totalRecords = data.total;
+          this.loading = false;
+        },
+        error: (err) => {
+          this.loadAlert('error', 'Ups, algo ha sucedido', err.message);
+          this.loading = false;
+        },
+      });
+    this.subs.push(sub1);
   }
 
   comicDetails(comic: any) {
-    console.log('🚀 ~ ComicsComponent ~ comicDetails ~ comic:', comic);
     this.currentComic = comic;
     this.visible = true;
   }
@@ -106,6 +145,42 @@ export class ComicsComponent implements OnInit {
     this.favoriteService.addFavorite(favorite).subscribe({
       next: (response: any) => {
         this.loadAlert('success', 'Todo salió bien!', response.message);
+        this.onDialogClose();
+        this.addFavoriteFlagById(comic, this.myComics);
+      },
+      error: (error) => {
+        this.loadAlert('error', 'error', error.error.message);
+      },
+    });
+  }
+
+  addFavoriteFlag(comics: any, favorites: Favorite[]) {
+    return comics.results.map((comic: any) => ({
+      ...comic,
+      favorite: favorites.some((fav) => fav.comicId === comic.id),
+    }));
+  }
+
+  addFavoriteFlagById(currentComic: any, myComics: any[]) {
+    this.myComics = myComics.map((comic: any) => ({
+      ...comic,
+      favorite: currentComic.id === comic.id,
+    }));
+  }
+
+  removeFavoriteFlagById(myComics: any[]) {
+    this.myComics = myComics.map((comic: any) => ({
+      ...comic,
+      favorite: false,
+    }));
+  }
+
+  removeToFavorites(id: number) {
+    this.favoriteService.removeFavorite(id).subscribe({
+      next: (response: any) => {
+        this.loadAlert('success', 'Todo salió bien!', response.message);
+        this.removeFavoriteFlagById(this.myComics);
+        this.onDialogClose();
       },
       error: (error) => {
         this.loadAlert('error', 'error', error.error.message);

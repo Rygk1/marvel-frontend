@@ -1,13 +1,14 @@
+<app-navbar class="custom-navbar"></app-navbar>
+
 <div class="spaceCards">
   <p-table
-    *ngIf="myComics.length > 0"
     [value]="myComics"
     [lazy]="true"
     [rows]="10"
     [totalRecords]="totalRecords"
     [loading]="loading"
     [paginator]="true"
-    (onLazyLoad)="loadComics($event)"
+    (onLazyLoad)="getComics($event)"
     [rowsPerPageOptions]="[20, 50, 100]"
     [responsiveLayout]="'scroll'"
   >
@@ -118,11 +119,15 @@
         />
         <p-button
           [rounded]="true"
-          icon="pi pi-heart"
-          [text]="true"
+          [icon]="!currentComic.favorite ? 'pi pi-heart' : 'pi pi-times'"
+          [text]="!currentComic.favorite ? true : false"
           severity="danger"
           size="large"
-          (onClick)="addToFavorites(currentComic)"
+          (onClick)="
+            !currentComic.favorite
+              ? addToFavorites(currentComic)
+              : removeToFavorites(currentComic.id)
+          "
         />
       </div>
     </div>

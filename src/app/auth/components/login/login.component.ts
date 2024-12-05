@@ -10,11 +10,12 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ImportsModule } from '../../../shared/components/imports';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ImportsModule],
+  imports: [ImportsModule, NavbarComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   providers: [MessageService],
@@ -50,11 +51,6 @@ export class LoginComponent {
           this.router.navigate(['/user/comics']);
         },
         error: (error) => {
-          console.log(
-            '🚀 ~ LoginComponent ~ this.authService.login ~ error:',
-            error
-          );
-
           this.loadAlert('error', 'error', error.error.message);
         },
       });
@@ -64,8 +60,6 @@ export class LoginComponent {
   }
 
   loadAlert(severity: string, summary: string, detail: string) {
-    console.log('🚀 ~ LoginComponent ~ loadAlert ~ severity:', severity);
-
     this.messageService.add({
       severity,
       summary,
