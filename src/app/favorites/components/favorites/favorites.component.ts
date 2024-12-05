@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ImportsModule } from '../../../shared/components/imports';
 import { FavoritesService } from '../../services/favorites.service';
-import { Favorite } from '../../../comics/services/models/favorites.model';
+import { Favorite } from '../../../comics/models/favorites.model';
 import { TokenService } from '../../../shared/services/token.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { map, pipe, Subscription } from 'rxjs';

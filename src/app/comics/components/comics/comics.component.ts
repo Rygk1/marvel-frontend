@@ -13,7 +13,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ImportsModule } from '../../../shared/components/imports';
-import { Favorite } from '../../services/models/favorites.model';
+import { Favorite } from '../../models/favorites.model';
 import { MessageService } from 'primeng/api';
 import { combineLatest, map, Subscription } from 'rxjs';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';

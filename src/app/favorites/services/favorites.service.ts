@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Favorite } from '../../comics/services/models/favorites.model';
+import { Favorite } from '../../comics/models/favorites.model';
 import { TokenService } from '../../shared/services/token.service';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../enviroment/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FavoritesService {
-  url = 'http://localhost:3000/';
+  url = environment.apiUrl;
 
   constructor(private https: HttpClient, private tokenService: TokenService) {}
 
