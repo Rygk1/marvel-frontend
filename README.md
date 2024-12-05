@@ -25,3 +25,24 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+# Marvel Project
+
+Este proyecto permite a los usuarios explorar personajes y cómics de Marvel, gestionar favoritos y autenticar usuarios. Está compuesto por un backend desarrollado con NestJS y un frontend construido con Angular.
+
+---
+
+## **Manual de Instalación**
+
+### Requerimientos Previos
+
+1. **Node.js y npm**  
+   Descarga e instalación desde [Node.js](https://nodejs.org/):
+
+   - Recomendado: Node.js 18+ y npm 9+.
+
+2. **Angular CLI**  
+   Instalar Angular CLI de forma global:
+   ```bash
+   npm install -g @angular/cli
+   ```
